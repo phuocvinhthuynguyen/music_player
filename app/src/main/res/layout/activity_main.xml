@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="match_parent"
+    android:background="@drawable/background_img"
     tools:context=".MainActivity"
     android:weightSum="10">
 
