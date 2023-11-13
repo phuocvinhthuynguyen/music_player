@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429055479639",
+    "project_id": "media-player-df63e",
+    "storage_bucket": "media-player-df63e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429055479639:android:128c11232f7f8f474bb812",
+        "android_client_info": {
+          "package_name": "com.example.music_player"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpd70PF049T1VeYnJc3Uj48J19vpVWwE8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
