@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     FirebaseAuth auth;
-    Button button;
+    Button button,button_online;
     TextView textView;
     FirebaseUser user;
     ListView listView;
@@ -40,11 +40,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        runtimePermission();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         auth=FirebaseAuth.getInstance();
         button=findViewById(R.id.logout);
+        button_online=findViewById(R.id.online);
         textView=findViewById(R.id.user_detail);
         user = auth.getCurrentUser();
         if(user == null){
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         }
         listView=findViewById(R.id.listViewSong);
 
-        runtimePermission();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        button_online.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), OnlineActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
 

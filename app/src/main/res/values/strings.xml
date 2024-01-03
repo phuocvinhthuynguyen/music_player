@@ -9,4 +9,6 @@
     <string name="logout">Logout</string>
     <string name="show_password">Show Password</string>
     <string name="forgot_password">Forgot password ?</string>
+    <string name="online_player">Online Player</string>
+    <string name="offline_player">Offline Player</string>
 </resources>
