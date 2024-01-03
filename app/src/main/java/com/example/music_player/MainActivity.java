@@ -41,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        runtimePermission();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         auth=FirebaseAuth.getInstance();
         button=findViewById(R.id.logout);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             textView.setText(user.getEmail());
         }
         listView=findViewById(R.id.listViewSong);
-
+        runtimePermission();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,8 +83,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void runtimePermission(){
-        Dexter.withContext(this).withPermission(Manifest.permission.READ_MEDIA_AUDIO)
+    public void runtimePermission() {
+        Dexter.withContext(this)
+                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
@@ -92,16 +94,16 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-
+                        // Handle permission denied
                     }
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
                         permissionToken.continuePermissionRequest();
-
                     }
                 }).check();
     }
+
 
     public ArrayList<File> findSong(File file) {
 
