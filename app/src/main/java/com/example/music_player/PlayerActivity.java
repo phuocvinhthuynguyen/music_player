@@ -198,7 +198,6 @@ public class PlayerActivity extends AppCompatActivity {
 
             }
         });
-
         btnprev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
