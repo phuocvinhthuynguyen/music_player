@@ -26,7 +26,7 @@ public class OnlineActivity extends AppCompatActivity {
     TextView textView;
     FirebaseUser user;
     ListView listView;
-    String[] items;
+    String[] items,urls;
     FirebaseStorage storage;
     StorageReference storageRef;
 
@@ -105,46 +105,59 @@ public class OnlineActivity extends AppCompatActivity {
         musicRef.listAll().addOnSuccessListener(listResult -> {
             ArrayList<String> songNames = new ArrayList<>();
             ArrayList<StorageReference> songRefs = new ArrayList<>();
+            ArrayList<String> httpsSongRefs = new ArrayList<>(); // Array to store HTTPS references
 
             for (StorageReference item : listResult.getItems()) {
                 // You may add further checks if needed
                 if (item.getName().endsWith(".mp3") || item.getName().endsWith(".wav")) {
                     songRefs.add(item);
                     songNames.add(item.getName().replace(".mp3", "").replace(".wav", ""));
+
+                    // Get the download URL for the selected song
+                    item.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String httpsSongRef = uri.toString();
+                        httpsSongRefs.add(httpsSongRef); // Add HTTPS reference to the array
+
+                        // Check if this is the last item being processed
+                        if (httpsSongRefs.size() == songRefs.size()) {
+                            // All URLs have been fetched, now update the UI
+                            updateUI(songRefs, songNames, httpsSongRefs);
+                        }
+                    }).addOnFailureListener(e -> {
+                        // Handle failure to get download URL
+                        Log.e("OnlineActivity", "Failed to get download URL: " + e.getMessage());
+                    });
                 }
             }
-
-            items = songNames.toArray(new String[0]);
-
-            customAdapter customAdapter = new customAdapter(songRefs);
-            listView.setAdapter(customAdapter);
-            customAdapter.notifyDataSetChanged();
-
-            listView.setOnItemClickListener((adapterView, view, i, l) -> {
-                StorageReference selectedSongRef = songRefs.get(i);
-                String songName = songNames.get(i);
-
-                // Get the download URL for the selected song
-                selectedSongRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    String httpsSongRef = uri.toString();
-
-                    // Start OnlinePlayerActivity with HTTPS reference, songName, and items array
-                    Intent playerIntent = new Intent(getApplicationContext(), OnlinePlayerActivity.class);
-                    playerIntent.putExtra("selectedSongRef", httpsSongRef);
-                    playerIntent.putExtra("songname", songName);
-                    playerIntent.putExtra("pos", i);
-                    playerIntent.putExtra("items", items); // Pass the items array
-                    startActivity(playerIntent);
-                }).addOnFailureListener(e -> {
-                    // Handle failure to get download URL
-                    Log.e("OnlineActivity", "Failed to get download URL: " + e.getMessage());
-                });
-            });
-
-
-
         });
     }
+
+    private void updateUI(ArrayList<StorageReference> songRefs, ArrayList<String> songNames, ArrayList<String> httpsSongRefs) {
+        items = songNames.toArray(new String[0]);
+        urls = httpsSongRefs.toArray(new String[0]);
+        customAdapter customAdapter = new customAdapter(songRefs);
+        listView.setAdapter(customAdapter);
+        customAdapter.notifyDataSetChanged();
+        Log.d("Debug", "Urls array size: " + urls.length);
+        Log.d("Debug", "Items array size: " + items.length);
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            StorageReference selectedSongRef = songRefs.get(i);
+            String songName = songNames.get(i);
+            String httpsSongRef = httpsSongRefs.get(i); // Get the HTTPS reference
+
+            // Start OnlinePlayerActivity with HTTPS reference, songName, and items array
+            Intent playerIntent = new Intent(getApplicationContext(), OnlinePlayerActivity.class);
+            playerIntent.putExtra("selectedSongRef", httpsSongRef);
+            playerIntent.putExtra("songname", songName);
+            playerIntent.putExtra("pos", i);
+            playerIntent.putExtra("items", items); // Pass the items array
+            playerIntent.putExtra("urls", urls); // Pass the HTTPS references array
+            startActivity(playerIntent);
+        });
+    }
+
+
+
 
     class customAdapter extends BaseAdapter {
         ArrayList<StorageReference> songRefs;
