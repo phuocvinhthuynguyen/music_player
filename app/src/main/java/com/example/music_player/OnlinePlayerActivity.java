@@ -186,10 +186,7 @@ public class OnlinePlayerActivity extends AppCompatActivity {
                 mediaPlayer.stop();
                 mediaPlayer.release();
                 // Increment position to play the next song
-                position++;
-                if (position >= items.length) {
-                    position = 0; // Wrap around to the first song if reached the end
-                }
+                position = ((position-1)<0)?(items.length-1):(position-1);
 
                 playSelectedSong();
             }
@@ -201,10 +198,7 @@ public class OnlinePlayerActivity extends AppCompatActivity {
                 mediaPlayer.stop();
                 mediaPlayer.release();
                 // Decrement position to play the previous song
-                position--;
-                if (position < 0) {
-                    position = items.length - 1; // Wrap around to the last song if reached the beginning
-                }
+                position = ((position-1)<0)?(items.length-1):(position-1);
 
                 playSelectedSong();
             }
