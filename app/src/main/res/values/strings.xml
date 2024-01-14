@@ -11,4 +11,6 @@
     <string name="forgot_password">Forgot password ?</string>
     <string name="online_player">Online Player</string>
     <string name="offline_player">Offline Player</string>
+    <string name="search_hint">Enter a name song</string>
+    <string name="search">Search</string>
 </resources>
